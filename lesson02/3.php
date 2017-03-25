@@ -13,6 +13,9 @@ function actMul($x,$y) {
 }
 
 function actDiv($x,$y) {
+	if($y == 0) {
+		return 'деление на ноль!';
+	}
 	return $x / $y;
 }
 
