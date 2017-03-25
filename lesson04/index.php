@@ -55,6 +55,9 @@
 							$i++;
 						}
 					}
+					if((count($images) - 2) % 3) { ?>
+						</div>
+					<?php }
 				} else { ?>
 					<div class="alert alert-warning" role="alert">В галерее нет ни одного фото!</div>
 				<?php } ?>
