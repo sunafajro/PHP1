@@ -6,12 +6,15 @@
 			.description li{
 				font-size: 18px;
 			}
+			.margin-left {
+				margin-left: 55px;
+			}
 		</style>
 	</head>
 	<body>
-		<h1>Домашнее задание урока №2</h1>
-		<h3>Описание задач:</h3>
-		<ol class="description">
+		<h1 class="margin-left">Домашнее задание урока №2</h1>
+		<h3 class="margin-left">Описание задач:</h3>
+		<ol class="margin-left">
 		<li>Объявить две целочисленные переменные $a и $b и задать им произвольные начальные значения. Затем написать скрипт, который работает по следующему принципу:
 			<ul>
 				<li>если $a и $b положительные, вывести их разность;</li>
@@ -37,8 +40,8 @@
 			</ul>
 		</li>
 		</ol>
-		<h3>Решения:</h3>
-		<ol>
+		<h3 class="margin-left">Решения:</h3>
+		<ol class="margin-left">
 			<?php
 			for($i=1;$i<8;$i++) { ?>
 			<li><a href="<?= $i ?>.php">Задание <?= $i ?></a></li>
