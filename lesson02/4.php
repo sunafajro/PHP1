@@ -26,17 +26,6 @@
         *  виде функций с двумя параметрами. Обязательно использовать оператор return.
         */
         
-        $a = NULL;
-        $b = NULL;
-        $act = NULL;
-        $result = NULL;
-        
-        if(isset($_POST['a']) && isset($_POST['b']) && isset($_POST['action'])) {
-            $a = (int)$_POST['a'];
-            $b = (int)$_POST['b'];
-            $act = (string)$_POST['action'];
-        }
-        
         function actSum($x,$y) {
             return $x + $y;
         }
@@ -56,15 +45,14 @@
             return $x / $y;
         }
         
-        if($act == 'sum') {
-            $result = actSum($a,$b);
-        } elseif($act == 'sub') {
-            $result = actSub($a,$b);
-        } elseif($act == 'mul') {
-            $result = actMul($a,$b);
-        } elseif($act == 'div') {
-            $result = actDiv($a,$b);
-        } 
+        function mathOperation($arg1, $arg2, $operation) {
+            switch($operation) {
+                case 'sum': return actSum($arg1, $arg2);
+                case 'sub': return actSub($arg1, $arg2);
+                case 'mul': return actMul($arg1, $arg2);
+                case 'div': return actDiv($arg1, $arg2);
+            }
+        }
     </code>
     </pre>
             </div>
@@ -114,7 +102,7 @@
                 }
                 ?>
 
-                <form method="post" action="./4.php" class="form">
+                <form method="post" action="./4.php">
                     <div class="form-group">
                         <input type="text" value="<?= $a ?>" name="a" class="form-control" placeholder="Введите первое число" required>
                     </div>

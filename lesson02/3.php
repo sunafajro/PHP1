@@ -26,17 +26,6 @@
         *  виде функций с двумя параметрами. Обязательно использовать оператор return.
         */
         
-        $a = NULL;
-        $b = NULL;
-        $act = NULL;
-        $result = NULL;
-        
-        if(isset($_POST['a']) && isset($_POST['b']) && isset($_POST['action'])) {
-            $a = (int)$_POST['a'];
-            $b = (int)$_POST['b'];
-            $act = (string)$_POST['action'];
-        }
-        
         function actSum($x,$y) {
             return $x + $y;
         }
@@ -115,7 +104,7 @@
 
                 ?>
 
-                <form method="post" action="./3.php" class="form">
+                <form method="post" action="./3.php">
                     <div class="form-group">
                         <input type="text" value="<?= $a ?>" name="a" class="form-control" placeholder="Введите первое число" required>
                     </div>
