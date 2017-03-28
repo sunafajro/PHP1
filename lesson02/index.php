@@ -20,10 +20,10 @@
 	</head>
 	<body>
 	    <div class="container">
-			<h1 class="margin-left">Домашнее задание урока №2</h1>
-			<p class="margin-left"><a href="../index.php">Назад</a></p>
-			<h3 class="margin-left">Описание задач:</h3>
-			<ol class="margin-left description">
+			<h1>Домашнее задание урока №2</h1>
+			<p><a href="../index.php">Назад</a></p>
+			<h3>Описание задач:</h3>
+			<ol class="description">
 			<li>Объявить две целочисленные переменные $a и $b и задать им произвольные начальные значения. Затем написать скрипт, который работает по следующему принципу:
 				<ul>
 					<li>если $a и $b положительные, вывести их разность;</li>
@@ -49,8 +49,8 @@
 				</ul>
 			</li>
 			</ol>
-			<h3 class="margin-left">Решения:</h3>
-			<ul class="margin-left">
+			<h3>Решения:</h3>
+			<ul>
 				<?php for($i=1;$i<8;$i++) :	?>
 					<?php if($i != 5) : ?>
 						<li><a href="<?= $i ?>.php">Задание <?= $i ?></a></li>
