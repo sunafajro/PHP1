@@ -1,0 +1,12 @@
+.container {
+	width:900px;
+	margin: 0 auto;
+}
+
+.description li{
+	font-size: 18px;
+}
+			
+.margin-top {
+	margin-top: 30px;
+}

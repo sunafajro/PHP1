@@ -1,17 +1,19 @@
 <!DOCTYPE html>
+<html lang="ru">
     <head>
-        <meta http-equiv=Content-Type content="text/html;charset=UTF-8">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Задание 1</title>
-        <style>
-        .margin-left {
-            margin-left: 55px;
-        }
-        </style>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="../style.css" rel="stylesheet">
     </head>
     <body>
-    <p class="margin-left"><a href="index.php">Назад</a></p>
-    <p class="margin-left"><b>Описание и код задания:</b></p>
+    <div class="container">
+    <p><a href="index.php">Назад</a></p>
+    <p><b>Описание и код задания:</b></p>
     <pre>
+    <code>
         /* 
         *  задание 1 
         *  Объявить две целочисленные переменные $a и $b и задать им произвольные начальные значения. 
@@ -21,37 +23,19 @@
         *    если $а и $b разных знаков, вывести их сумму;</li>
         *    ноль можно считать положительным числом.</li>
         */
-        
-        $a = NULL;
-        $b = NULL;
-        $result = NULL;
-        
-        if(isset($_POST['a']) && isset($_POST['b'])) {
-            $a = (int)$_POST['a'];
-            $b = (int)$_POST['b'];
             
-            if($a >= 0 && $b >= 0) {
-                $result = $a - $b;
-            } else if($a < 0 && $b < 0) {
-                $result = $a * $b;
-            } else {
-                $result = $a + $b;
-            }
+        if($a >= 0 && $b >= 0) {
+            $result = $a - $b;
+        } else if($a < 0 && $b < 0) {
+            $result = $a * $b;
+        } else {
+            $result = $a + $b;
         }
-        ?>
-        
-        &lt;form class="margin-left" method="post" action="1.php"&gt;
-            &lt;input type="text" value="&lt;?= $a ?&gt;" name="a" required&gt;
-            &lt;input type="text" value="&lt;?= $b ?&gt;" name="b" required&gt;
-            &lt;input type="submit"&gt;
-        &lt;/form&gt;
-        &lt;?php
-        if($result): ?&gt;        
-            &lt;p class="margin-left"&gt;&lt;?= $result ?&gt;&lt;/p&gt; 
-        &lt;?php endif ?&gt;
+    </code>
     </pre>
     
-    <p class="margin-left"><b>Результат:</b></p>
+    
+    <p><b>Результат:</b></p>
         <?php
 
         $a = NULL;
@@ -76,14 +60,19 @@
         }
         ?>
         
-        <form class="margin-left" method="post" action="1.php">
-            <input type="text" value="<?= $a ?>" name="a" required>
-            <input type="text" value="<?= $b ?>" name="b" required>
-            <input type="submit">
+        <form method="post" action="./1.php">
+		    <div class="form-group">
+				<input type="text" value="<?= $a ?>" name="a" class="form-control" placeholder="Введите первое число" required>
+			</div>
+			<div class="form-group">
+				<input type="text" value="<?= $b ?>" name="b" class="form-control" placeholder="Введите второе число" required>
+			</div>
+            <input type="submit" class="btn btn-default">
         </form>
-        <?php
-        if($result): ?>        
-            <p class="margin-left"><?= $result ?></p> 
-        <?php endif ?>
+        <?php if($result !== NULL): ?>
+		<div class="well margin-top">                
+            <samp><?= $result ?></samp>         
+        </div>
+		<?php endif ?>
     </body>
 </html>
