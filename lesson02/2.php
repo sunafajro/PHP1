@@ -10,7 +10,13 @@
     </head>
     <body>
 	<div class="container">
-	<p><a href="index.php">Назад</a></p>
+    <div class="row">
+        <div class="col-sm-12">
+            <p><a href="index.php">Назад</a></p>
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-sm-8">
 	<p><b>Описание и код задания:</b></p>
     <pre>
     <code>
@@ -42,33 +48,35 @@
         }
     </code>
     </pre>
-		
-		<p><b>Результат:</b></p>
-		<div class="well margin-top">
-			<?php
+	</div>
+        <div class="col-sm-4">	
+            <p><b>Результат:</b></p>
+            <div class="well">
+                <?php
 
-				$a = rand(0, 15);
+                    $a = rand(0, 15);
 
-				switch($a) {
-					case 0: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 1: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 2: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 3: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 4: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 5: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 6: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 7: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 8: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 9: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 10: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 11: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 12: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 13: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 14: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-					case 15: echo '<p class="margin-left">' . $a . '</p>'; $a++;
-				} 
-			?>
-		</div>
+                    switch($a) {
+                        case 0: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 1: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 2: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 3: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 4: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 5: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 6: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 7: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 8: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 9: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 10: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 11: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 12: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 13: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 14: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                        case 15: echo '<p class="margin-left">' . $a . '</p>'; $a++;
+                    } 
+                ?>
+            </div>
+        </div>
 	</div>
 	</body>
 </html>
