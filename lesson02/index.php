@@ -42,11 +42,12 @@
 		</li>
 		</ol>
 		<h3 class="margin-left">Решения:</h3>
-		<ol class="margin-left">
-			<?php
-			for($i=1;$i<8;$i++) { ?>
-			<li><a href="<?= $i ?>.php">Задание <?= $i ?></a></li>
-			<?php } ?>
-		</ol>
+		<ul class="margin-left">
+			<?php for($i=1;$i<8;$i++) :	?>
+				<?php if($i != 5) : ?>
+					<li><a href="<?= $i ?>.php">Задание <?= $i ?></a></li>
+				<?php endif; ?>
+			<?php endfor; ?>
+		</ul>
 	</body>
 </html>
