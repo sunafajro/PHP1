@@ -10,38 +10,38 @@
     </head>
     <body>
 	<div class="container">
-		<p><a href="index.php">Назад</a></p>
-		<p><b>Описание и код задания:</b></p>
-        <pre>
-        <code>
-            /* 
-            *  задание 2 
-            *  Присвоить переменной $а значение в промежутке [0..15].  
-            *  С помощью оператора switch организовать вывод чисел от $a до 15.
-            */
-            
-            $a = rand(0, 15);
+	<p><a href="index.php">Назад</a></p>
+	<p><b>Описание и код задания:</b></p>
+    <pre>
+    <code>
+        /* 
+        *  задание 2 
+        *  Присвоить переменной $а значение в промежутке [0..15].  
+        *  С помощью оператора switch организовать вывод чисел от $a до 15.
+        */
+        
+        $a = rand(0, 15);
 
-            switch($a) {
-                case 0: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 1: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 2: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 3: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 4: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 5: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 6: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 7: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 8: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 9: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 10: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 11: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 12: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 13: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 14: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-                case 15: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
-            }
-        </code>
-        </pre>
+        switch($a) {
+            case 0: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 1: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 2: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 3: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 4: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 5: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 6: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 7: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 8: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 9: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 10: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 11: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 12: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 13: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 14: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+            case 15: echo '&lt;p&gt;' . $a . '&lt;/p&gt;'; $a++;
+        }
+    </code>
+    </pre>
 		
 		<p><b>Результат:</b></p>
 		<div class="well margin-top">
@@ -69,6 +69,6 @@
 				} 
 			?>
 		</div>
-		<div>
+	</div>
 	</body>
 </html>

@@ -74,5 +74,6 @@
             <samp><?= $result ?></samp>         
         </div>
 		<?php endif ?>
+	</div>
     </body>
 </html>
