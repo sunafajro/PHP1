@@ -6,15 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Фотогалерея</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!--[if lt IE 9]>
+    <link href="../style.css" rel="stylesheet">
+	<!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-	<style>
-		.margin-top {
-			margin-top: 20px;
-		}
-	</style>
   </head>
   <body>
     <div class="container">
@@ -69,9 +65,9 @@
 				<form action="./index.php" method="post" enctype="multipart/form-data" id="upload-form">
 					<div class="form-group">
 						<input type="file" class="from-control" name="image" required>
-						<p class="help-block">Файлы типа jpg, размером меньше 500 Кбайт.</p>
-						<input type="hidden" name="hidden-field" value="secret">
+						<p class="help-block">Файлы типа jpg, размером меньше 500 Кбайт.</p>						
 					</div>
+					<input type="hidden" name="hidden-field" value="secret">
 					<input type="submit" class="btn btn-default">
 				</form>
 			</div>

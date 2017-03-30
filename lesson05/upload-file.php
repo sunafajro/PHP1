@@ -31,8 +31,8 @@ function imgCopyResize($filename, $imgpath, $name) {
 
 if(!empty($_FILES) && $_FILES['image']['name'] != '') {
 	/* задаем параметры загруженного изображения */
-	$tmp_imgname = pathinfo($_FILES['image']['name']);
-    $imgname = $tmp_imgname['filename'];
+	//$tmp_imgname = pathinfo($_FILES['image']['name']);
+    //$imgname = $tmp_imgname['filename'];
 	$imgtype = $_FILES['image']['type'];
 	$imgsize = $_FILES['image']['size'];
 	$imgtmpname = $_FILES['image']['tmp_name'];
@@ -75,7 +75,7 @@ if(!empty($_FILES) && $_FILES['image']['name'] != '') {
 		*/
 		if(move_uploaded_file($imgtmpname, $uploadorigfile)) {
 			echo '<div class="alert alert-success" role="alert">Файл успешно загружен на сервер</div>';
-            $Query = "INSERT INTO images (img_name, img_orig_path, img_thumb_path, img_size, img_view_cnt) VALUES('$imgname', '$uploadorigfile', '$img_thumb_path', $imgsize, 0)";
+            $Query = "INSERT INTO images (img_name, img_orig_path, img_thumb_path, img_size, img_view_cnt) VALUES('$newname', '$uploadorigfile', '$img_thumb_path', $imgsize, 0)";
             if($db) {
                 $result = $db->exec($Query);
             }
