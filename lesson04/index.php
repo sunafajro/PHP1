@@ -26,7 +26,9 @@
 		<div classs="row">
 			<div class="col-sm-9">
 				<?php 
-				require_once('upload.php');
+				if($_POST) {
+					require_once('upload.php');
+				}
 				$images = scandir('./img/small/');
 				if(count($images) > 2) {
 					$i = 1;
@@ -64,10 +66,11 @@
 			</div>
 			<div class="col-sm-3">
 				<h3>Загрузить файл:</h3>
-				<form action="index.php" method="post" enctype="multipart/form-data">
+				<form action="./index.php" method="post" enctype="multipart/form-data" id="upload-form">
 					<div class="form-group">
 						<input type="file" class="from-control" name="image" required>
 						<p class="help-block">Файлы типа jpg, размером меньше 500 Кбайт.</p>
+						<input type="hidden" name="hidden-field" value="secret">
 					</div>
 					<input type="submit" class="btn btn-default">
 				</form>
