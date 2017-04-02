@@ -1,4 +1,6 @@
 <?php
+    $message = 'В галерее нет ни одного фото!';
+	$db = NULL;
     /* подключаемся к базе */
 	require_once('./db.php');
 	if($_POST) {
@@ -49,39 +51,38 @@
                     $img_cnt = $query->fetch();
                     $query = $db->query("SELECT * FROM images ORDER BY img_view_cnt DESC");
                     $images = $query->fetchAll();
-                }
-				//$images = scandir('./img/small/');
-				if($img_cnt['cnt'] > 0) {
-					$i = 1;
-					$rows = ceil($img_cnt['cnt'] / 3);
-					foreach($images as $image) {
-						    if($i % 3 == 1) { ?>
-								<div class="row margin-top">
-							<?php } ?>
-								<div class="col-sm-4 text-center">
-									<a href="#" id="<?= $image['id'] ?>" class="modal-link" data-toggle="modal" data-target="#modal_<?= $i ?>"><img src="<?= $image['img_thumb_path'] ?>" alt="<?= $image['img_name'] ?>" class="img-thumbnail"></a>
-                                    <p class="text-center"><?= $image['img_name'] ?> <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="views_<?= $image['id'] ?>"><?= $image['img_view_cnt'] ?></span></p>
-									<div class="modal fade" id="modal_<?= $i ?>" tabindex="-1" role="dialog" aria-labelledby="label_<?= $i ?>">
-									  <div class="modal-dialog" role="document">
-										<div class="modal-content">
-										  <div class="modal-body text-center">
-											<img src="<?= $image['img_orig_path'] ?>" alt="<?= $image['img_name'] ?>" class="img-thumbnail">
+
+					if($img_cnt['cnt'] > 0) {
+						$i = 1;
+						$rows = ceil($img_cnt['cnt'] / 3);
+						foreach($images as $image) { ?>
+								<?php if($i % 3 == 1): ?>
+									<div class="row margin-top">
+								<?php endif ?>
+									<div class="col-sm-4 text-center">
+										<a href="#" id="<?= $image['id'] ?>" class="modal-link" data-toggle="modal" data-target="#modal_<?= $i ?>"><img src="<?= $image['img_thumb_path'] ?>" alt="<?= $image['img_name'] ?>" class="img-thumbnail"></a>
+										<p class="text-center"><?= $image['img_name'] ?> <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="views_<?= $image['id'] ?>"><?= $image['img_view_cnt'] ?></span></p>
+										<div class="modal fade" id="modal_<?= $i ?>" tabindex="-1" role="dialog" aria-labelledby="label_<?= $i ?>">
+										  <div class="modal-dialog" role="document">
+											<div class="modal-content">
+											  <div class="modal-body text-center">
+												<img src="<?= $image['img_orig_path'] ?>" alt="<?= $image['img_name'] ?>" class="img-thumbnail">
+											  </div>
+											</div>
 										  </div>
 										</div>
-									  </div>
 									</div>
-								</div>
-							<?php if($i % 3 == 0) { ?>
-								</div>
-							<?php } ?>
-						<?php
-							$i++;
-					}
-					if($img_cnt['cnt'] % 3) { ?>
-						</div>
-					<?php }
-				} else { ?>
-					<div class="alert alert-warning" role="alert">В галерее нет ни одного фото!</div>
+								<?php if($i % 3 == 0): ?>
+									</div>
+								<?php endif ?>
+							<?php $i++; ?>
+						<?php } ?>
+						<?php if($img_cnt['cnt'] % 3) { ?>
+							</div>
+						<?php } ?>
+					<?php } ?>
+				<?php } else { ?>
+					<div class="alert alert-warning" role="alert"><?= $message ?></div>
 				<?php } ?>
 			</div>
 			<div class="col-sm-3">
