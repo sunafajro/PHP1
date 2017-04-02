@@ -54,7 +54,6 @@
 
 					if($img_cnt['cnt'] > 0) {
 						$i = 1;
-						$rows = ceil($img_cnt['cnt'] / 3);
 						foreach($images as $image) { ?>
 								<?php if($i % 3 == 1): ?>
 									<div class="row margin-top">
