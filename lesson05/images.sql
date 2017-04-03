@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1
--- Время создания: Мар 30 2017 г., 20:58
+-- Время создания: Апр 03 2017 г., 08:42
 -- Версия сервера: 10.1.21-MariaDB
 -- Версия PHP: 7.1.1
 
@@ -40,9 +40,12 @@ CREATE TABLE `images` (
 --
 
 INSERT INTO `images` (`id`, `img_name`, `img_orig_path`, `img_thumb_path`, `img_size`, `img_view_cnt`) VALUES
-(15, 'pic_1490896522.jpg', './img/orig/pic_1490896522.jpg', './img/small/pic_1490896522.jpg', 282212, 10),
-(16, 'pic_1490896534.jpg', './img/orig/pic_1490896534.jpg', './img/small/pic_1490896534.jpg', 282212, 8),
-(17, 'pic_1490896573.jpg', './img/orig/pic_1490896573.jpg', './img/small/pic_1490896573.jpg', 282212, 14);
+(23, 'pic_1491199789.jpg', './img/orig/pic_1491199789.jpg', './img/small/pic_1491199789.jpg', 282212, 1),
+(24, 'pic_1491199791.jpg', './img/orig/pic_1491199791.jpg', './img/small/pic_1491199791.jpg', 282212, 1),
+(25, 'pic_1491199889.jpg', './img/orig/pic_1491199889.jpg', './img/small/pic_1491199889.jpg', 282212, 1),
+(26, 'pic_1491199902.jpg', './img/orig/pic_1491199902.jpg', './img/small/pic_1491199902.jpg', 282212, 4),
+(27, 'pic_1491201298.jpg', './img/orig/pic_1491201298.jpg', './img/small/pic_1491201298.jpg', 282212, 2),
+(28, 'pic_1491201468.jpg', './img/orig/pic_1491201468.jpg', './img/small/pic_1491201468.jpg', 282212, 3);
 
 --
 -- Индексы сохранённых таблиц
@@ -62,7 +65,7 @@ ALTER TABLE `images`
 -- AUTO_INCREMENT для таблицы `images`
 --
 ALTER TABLE `images`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

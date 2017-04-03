@@ -1,17 +1,30 @@
 <?php
-    $message = 'В галерее нет ни одного фото!';
+    $message_error = NULL;
+    $message_success = NULL;
+    $img_cnt = NULL;
 	$db = NULL;
+    if(isset($_GET['result'])) {
+        switch($_GET['result']) {
+            case 'success': $message_success = 'Файл успешно загружено на сервер!'; break;
+            case 'error_1': $message_error = 'Не удалось загрузить файл на сервер!'; break;
+            case 'error_2': $message_error = 'Файл должен быть не более 500 Кбайт и тип jpg!'; break;
+        }
+    }
     /* подключаемся к базе */
 	require_once('./db.php');
 	if($_POST) {
 		/* если пришли данные для загрузки файла отрабатываем upload-file.php */ 
-		if(isset($_POST['type']) && $_POST['type'] == 'main-form') {
-			require_once('./upload-file.php');
-			header('Location: ./index.php');
-			exit;
+		if(isset($_POST['type']) && $_POST['type'] == 'main-form' && $db) {
+            if(!empty($_FILES) && $_FILES['image']['name'] != '') {
+                require_once('./upload-file.php');
+                $result = uploadImage($db, $_FILES);
+                header('Location: ./index.php?result='.$result);
+            } else {
+                $message_error = 'Пустой массив файлов!';
+            }
 		}
 		/* если пришли данные обновления колич. просмотров отрабатываем update-views.php */		
-		elseif(isset($_POST['type']) && isset($_POST['id']) && $_POST['type'] == 'ajax' ) {
+		elseif(isset($_POST['type']) && isset($_POST['id']) && $_POST['type'] == 'ajax' && $db) {
 			$img_id = (int)$_POST['id'];
 			require_once('./update-views.php');
 			$data = ['id' => $img_id, 'views' => $response];
@@ -19,6 +32,15 @@
 			exit;
 		}
 	}
+    if($db) {
+        $img_cnt = getImagesCount($db);
+        if($img_cnt['cnt'] > 0) {
+            $images = getImages($db);
+        } else {
+            $message_error = 'В галерее нет ни одного фото!';
+        }
+    }
+    
 ?>
 
 <!DOCTYPE html>
@@ -44,45 +66,41 @@
 		</div>
 		<div classs="row">
 			<div class="col-sm-9">
+                <?php if($message_success): ?>
+                <div class="alert alert-success" role="alert"><?= $message_success ?></div>
+                <?php endif ?>
+                <?php if($message_error): ?>
+                <div class="alert alert-warning" role="alert"><?= $message_error ?></div>
+                <?php endif ?>
 				<?php	
-				/* получаем список дахх для вывода фотографий в галерею */
-				if($db) {
-                    $query = $db->query("SELECT COUNT(*) as cnt FROM images");
-                    $img_cnt = $query->fetch();
-                    $query = $db->query("SELECT * FROM images ORDER BY img_view_cnt DESC");
-                    $images = $query->fetchAll();
-
-					if($img_cnt['cnt'] > 0) {
-						$i = 1;
-						foreach($images as $image) { ?>
-								<?php if($i % 3 == 1): ?>
-									<div class="row margin-top">
-								<?php endif ?>
-									<div class="col-sm-4 text-center">
-										<a href="#" id="<?= $image['id'] ?>" class="modal-link" data-toggle="modal" data-target="#modal_<?= $i ?>"><img src="<?= $image['img_thumb_path'] ?>" alt="<?= $image['img_name'] ?>" class="img-thumbnail"></a>
-										<p class="text-center"><?= $image['img_name'] ?> <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="views_<?= $image['id'] ?>"><?= $image['img_view_cnt'] ?></span></p>
-										<div class="modal fade" id="modal_<?= $i ?>" tabindex="-1" role="dialog" aria-labelledby="label_<?= $i ?>">
-										  <div class="modal-dialog" role="document">
-											<div class="modal-content">
-											  <div class="modal-body text-center">
-												<img src="<?= $image['img_orig_path'] ?>" alt="<?= $image['img_name'] ?>" class="img-thumbnail">
-											  </div>
-											</div>
-										  </div>
-										</div>
-									</div>
-								<?php if($i % 3 == 0): ?>
-									</div>
-								<?php endif ?>
-							<?php $i++; ?>
-						<?php } ?>
-						<?php if($img_cnt['cnt'] % 3) { ?>
-							</div>
-						<?php } ?>
-					<?php } ?>
-				<?php } else { ?>
-					<div class="alert alert-warning" role="alert"><?= $message ?></div>
-				<?php } ?>
+                if($img_cnt['cnt'] > 0) {
+                    $i = 1;
+                    foreach($images as $image) { ?>
+                            <?php if($i % 3 == 1): ?>
+                                <div class="row margin-top">
+                            <?php endif ?>
+                                <div class="col-sm-4 text-center">
+                                    <a href="#" id="<?= $image['id'] ?>" class="modal-link" data-toggle="modal" data-target="#modal_<?= $i ?>"><img src="<?= $image['img_thumb_path'] ?>" alt="<?= $image['img_name'] ?>" class="img-thumbnail"></a>
+                                    <p class="text-center"><?= $image['img_name'] ?> <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <span id="views_<?= $image['id'] ?>"><?= $image['img_view_cnt'] ?></span></p>
+                                    <div class="modal fade" id="modal_<?= $i ?>" tabindex="-1" role="dialog" aria-labelledby="label_<?= $i ?>">
+                                      <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                          <div class="modal-body text-center">
+                                            <img src="<?= $image['img_orig_path'] ?>" alt="<?= $image['img_name'] ?>" class="img-thumbnail">
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                            <?php if($i % 3 == 0): ?>
+                                </div>
+                            <?php endif ?>
+                        <?php $i++; ?>
+                    <?php } ?>
+                    <?php if($img_cnt['cnt'] % 3) { ?>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
 			</div>
 			<div class="col-sm-3">
 				<h3>Загрузить файл:</h3>
