@@ -19,6 +19,7 @@
                 require_once('./upload-file.php');
                 $result = uploadImage($db, $_FILES);
                 header('Location: ./index.php?result='.$result);
+                exit;
             } else {
                 $message_error = 'Пустой массив файлов!';
             }
