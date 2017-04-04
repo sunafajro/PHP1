@@ -17,10 +17,13 @@ function renderPage($db, $variables) {
     $params[] = '{{SITE_TITLE}}';
     $values[] = $variables['title'];
     switch($variables['page']) {
-        case 'index': $data = getItems($db, $variables['unit']); break;
-        case 'view': $data = getItem($db, $variables['unit'], $variables['id']); break;
-        case 'create': $data = createForm($db, $variables['unit']); break;
-        case 'update': $data = updateForm($db, $variables['unit']); break;
+        case 'index': $data = getItems($db, $variables['unit'], $variables['sort']); break;
+        case 'view': 
+            $data = getItem($db, $variables['unit'], $variables['id']); 
+            if(!empty($data)) {
+                $data['img_view_cnt'] = updateViewCount($db, $variables['id']);
+            }
+            break;
     }
     /* формируем данные для вывода на страницу и подставляем готовый код в шаблон */
     
@@ -28,41 +31,49 @@ function renderPage($db, $variables) {
     $result = '';
 
     if($variables['page'] == 'index') {
-        $i = 1;
-        foreach($data as $value) {
-            $arr1 = [];
-            $arr2 = [];
-            $item = '';
-    
-            if($i % 3 == 1) {
-                $item .= '<div class="row">';
+        if(!empty($data)) {
+            $i = 1;
+            foreach($data as $value) {
+                $arr1 = [];
+                $arr2 = [];
+                $item = '';
+        
+                if($i % 3 == 1) {
+                    $item .= '<div class="row">';
+                }
+                foreach($value as $k => $v) {
+                    $arr1[] = '{{' . strtoupper($k) . '}}';
+                    $arr2[] = $v;
+                }
+                $item .= file_get_contents('./templates/' . $variables['unit'] . '/_items.php');
+                if($i % 3 == 0) {
+                    $item .= '</div>';
+                }   
+                $result .= str_replace($arr1, $arr2, $item);
+                $i++;
             }
-            foreach($value as $k => $v) {
-                $arr1[] = '{{' . strtoupper($k) . '}}';
-                $arr2[] = $v;
+            if(count($data) % 3) {
+                $result .= '</div>';
             }
-            $item .= file_get_contents('./templates/' . $variables['unit'] . '/_items.php');
-            if($i % 3 == 0) {
-                $item .= '</div>';
-            }   
-            $result .= str_replace($arr1, $arr2, $item);
-            $i++;
-        }
-        if(count($data) % 3) {
-            $result .= '</div>';
-        }        
+        }  else {
+            $result .= '<div class="alert alert-warning" role="alert">Нет элементов для отображения!</div>';
+        }      
     }
 
     if($variables['page'] == 'view') {
-        $item = '';
-        $arr1 = [];
-        $arr2 = [];
-        foreach($data as $k => $v) {
-            $arr1[] = '{{' . strtoupper($k) . '}}';
-            $arr2[] = $v;                      
-        }
-        $item = file_get_contents('./templates/' . $variables['unit'] . '/_item.php');
-        $result = str_replace($arr1, $arr2, $item);
+        if(!empty($data)) {
+            $item = '';
+            $arr1 = [];
+            $arr2 = [];
+            foreach($data as $k => $v) {
+                $arr1[] = '{{' . strtoupper($k) . '}}';
+                $arr2[] = $v;                      
+            }
+            $item = file_get_contents('./templates/' . $variables['unit'] . '/_item.php');
+            $result = str_replace($arr1, $arr2, $item);
+        }  else {
+            $result .= '<div class="alert alert-warning" role="alert">Нет элементов для отображения!</div>';
+        } 
     }
 
     $values[] = $result;
@@ -76,30 +87,65 @@ function renderPage($db, $variables) {
     return $html;
 }
 
-function getItems($db, $table){
-    $query = $db->query('SELECT * FROM ' . $table);
+function getItems($db, $table, $sort) {
+    $q = 'SELECT * FROM ' . $table;
+    if($sort != NULL && !empty($sort)) {
+        $q .= ' ORDER BY ' . $sort['column'] . ' ' . $sort['direction'];
+    }
+    $query = $db->query($q);
     $images = $query->fetchAll(PDO::FETCH_ASSOC);
     
     return $images;
 }
 
-function getItem($db, $table, $id){
+function getItem($db, $table, $id) {
     $query = $db->query('SELECT * FROM ' . $table . ' WHERE id=' . $id);
     $image = $query->fetch(PDO::FETCH_ASSOC);
-    
     return $image;
 }
 
-function createForm($db, $table){
-    //$query = $db->query('SELECT * FROM ' . $table . 'WHERE id=' . $id);
-    //$images = $query->fetchAll();
+function createItem($db, $table, $args){
+    $params = [];
+    $names = [];
+    foreach($args as $key => $value) {
+        $params[] = $key;
+        $names[] = ':' . $key;
+    }
+    $sql = 'INSERT INTO ' . $table . ' (' . implode(',', $params) . ') VALUES (' . implode(',', $names) . ')';
+    $query = $db->prepare($sql);
+    $query->execute($args);
     
     return true;
 }
 
-function updateForm($db, $table, $id){
-    //$query = $db->query('SELECT * FROM ' . $table . 'WHERE id=' . $id);
-    //$images = $query->fetchAll();
+function updateItem($db, $table, $args){
+    $params = [];
+    foreach($args as $key => $value) {
+        $params[] = $key . '=:' . $key;
+    }
+    $sql = 'UPDATE ' . $table . ' SET ' . implode(',', $params) . ' WHERE id=:id';
+    $query = $db->prepare($sql);
+    $query->execute($args);
     
     return true;
+}
+
+function deleteItem($db, $table, $args){
+    $sql = 'DELETE FROM ' . $table . ' WHERE id=:id';
+    $query = $db->prepare($sql);
+    $query->execute($args);
+    
+    return true;
+}
+
+
+function updateViewCount($db, $id) {
+    $result = $db->prepare('UPDATE images set img_view_cnt = img_view_cnt + 1 WHERE id=:id');
+    $result->bindParam(':id', $id);
+    $result->execute();
+
+    $result = $db->prepare('SELECT img_view_cnt as cnt FROM images WHERE id=:id');
+    $result->execute([':id' => $id]);
+    $response = $result->fetchColumn();
+    return $response;
 }

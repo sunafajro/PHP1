@@ -1,5 +1,6 @@
 <?php 
 
+/* данные для подключения к базе */
 define('HOST', 'localhost');
 define('USER', 'root');
 define('PASS', 'password');
