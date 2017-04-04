@@ -1,6 +1,6 @@
 <?php
 /* проверяем массив POST-запроса */
-if(empty($_POST)) {
+if(!empty($_POST)) {
     
 }
 
@@ -13,7 +13,11 @@ if(empty($_GET)) {
     $parts = explode('/', $_GET['r']);
     $variables['unit'] = $parts[0];
     $variables['page'] = $parts[1];
-    $variables['title'] = 'Фотогалерея';
+    switch($parts[0]) {
+        case 'images': $variables['title'] = 'Фотогалерея'; break;
+        case 'feedbacks': $variables['title'] = 'Книга отзывов'; break;
+        case 'products': $variables['title'] = 'Магазин'; break;
+    }
     if(isset($_GET['id'])) {
         $variables['id'] = $_GET['id'];
     }

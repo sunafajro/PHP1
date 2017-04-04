@@ -8,13 +8,13 @@ function renderPage($db, $variables) {
     /* подключаем файл с шаблоном рабочей области */
     $content = file_get_contents('./templates/' . $variables['unit'] . '/' . $variables['page'] . '.php');
     /* подключаем файл с правой колонкой */
-    $column = file_get_contents('./templates/layouts/column.php');
+    $column = file_get_contents('./templates/' . $variables['unit'] . '/column.php');
     /* подключаем файл с подвалом */
     $footer = file_get_contents('./templates/layouts/footer.php');
     $html .= $header;
     
     /* формируем данные для вывода на страницу и подставляем готовый код в шаблон */
-    $params[] = '{{TITLE}}';
+    $params[] = '{{SITE_TITLE}}';
     $values[] = $variables['title'];
     switch($variables['page']) {
         case 'index': $data = getItems($db, $variables['unit']); break;
@@ -25,18 +25,46 @@ function renderPage($db, $variables) {
     /* формируем данные для вывода на страницу и подставляем готовый код в шаблон */
     
     $params[] = '{{CONTENT}}';
-     
+    $result = '';
+
+    if($variables['page'] == 'index') {
+        $i = 1;
+        foreach($data as $value) {
+            $arr1 = [];
+            $arr2 = [];
+            $item = '';
+    
+            if($i % 3 == 1) {
+                $item .= '<div class="row">';
+            }
+            foreach($value as $k => $v) {
+                $arr1[] = '{{' . strtoupper($k) . '}}';
+                $arr2[] = $v;
+            }
+            $item .= file_get_contents('./templates/' . $variables['unit'] . '/_items.php');
+            if($i % 3 == 0) {
+                $item .= '</div>';
+            }   
+            $result .= str_replace($arr1, $arr2, $item);
+            $i++;
+        }
+        if(count($data) % 3) {
+            $result .= '</div>';
+        }        
+    }
+
     if($variables['page'] == 'view') {
+        $item = '';
         $arr1 = [];
         $arr2 = [];
         foreach($data as $k => $v) {
             $arr1[] = '{{' . strtoupper($k) . '}}';
-            $arr2[] = $v;
-            $item = file_get_contents('./templates/' . $variables['unit'] . '/_item.php');           
+            $arr2[] = $v;                      
         }
+        $item = file_get_contents('./templates/' . $variables['unit'] . '/_item.php');
         $result = str_replace($arr1, $arr2, $item);
     }
-    
+
     $values[] = $result;
     
     $html .= $content;
@@ -50,7 +78,7 @@ function renderPage($db, $variables) {
 
 function getItems($db, $table){
     $query = $db->query('SELECT * FROM ' . $table);
-    $images = $query->fetchAll();
+    $images = $query->fetchAll(PDO::FETCH_ASSOC);
     
     return $images;
 }
