@@ -11,8 +11,11 @@ if($message_error) {
 /* подключаем методы */
 require_once('./methods/functions.php');
 
-/* подключаем обработчик запросов */
-require_once('./methods/router.php');
+/* подключаем обработчик post запросов */
+require_once('./methods/post.php');
+
+/* подключаем обработчик get запросов */
+require_once('./methods/get.php');
 
 /* выводим страничку */
 echo renderPage($db, $variables);

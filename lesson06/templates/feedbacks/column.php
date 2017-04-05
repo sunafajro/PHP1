@@ -19,6 +19,6 @@
         </div>
         <input type="hidden" name="id" id="id" value="">
         <input type="hidden" name="r" id="r" value="feedbacks/create">
-        <input type="submit" class="btn btn-default" id="feedback-from-button">
+        <input type="submit" class="btn btn-default">
     </form>
 </div>
