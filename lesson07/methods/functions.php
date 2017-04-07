@@ -43,7 +43,7 @@ function renderPage($db, $variables) {
     if(!empty($menu_items)) {
         $menu_list = '';
         foreach($menu_items as $m) {
-            if(isset($_SESSION['role']) && $_SESSION['role'] == 'guest' && $m['folder'] != 'users') {
+            if(isset($_SESSION['role']) && $_SESSION['role'] != 'administrator' && $m['folder'] != 'users') {
                 $menu_list .= '<li><a href="./index.php?r=' . $m['folder'] . '/index">' . $m['title'] . '</a></li>';
             }
             if(isset($_SESSION['role']) && $_SESSION['role'] == 'administrator') {
@@ -59,7 +59,7 @@ function renderPage($db, $variables) {
         case 'index': $data = getItems($db, $variables['unit'], $variables['sort']); break;
         case 'view': 
             $data = getItem($db, $variables['unit'], $variables['id']); 
-            if(!empty($data)) {
+            if(!empty($data) && $variables['unit'] == 'images') {
                 $data['img_view_cnt'] = updateViewCount($db, $variables['id']);
             }
             break;
@@ -75,11 +75,11 @@ function renderPage($db, $variables) {
             $file = './templates/' . $variables['unit'] . '/_items.php';
             /* если надо вывести в виде таблицы */
             if($variables['format'] == 'grid') {
-                $result .= gridItems($data, $file);
+                $result .= gridItems($data, $file, $variables['unit']);
             }
             /* в противном случае в виде списка */            
             else {
-                $result .= listItems($data, $file);
+                $result .= listItems($data, $file, $variables['unit']);
             }
         }  else {
             $result .= '<div class="alert alert-warning" role="alert">Нет элементов для отображения!</div>';
@@ -168,9 +168,18 @@ function deleteItem($db, $table, $args){
     return true;
 }
 
-function gridItems($data, $file) {
+function gridItems($data, $file, $unit) {
     $result = '';
     $i = 1;
+
+    switch($unit) {
+        case 'products': $nomination = 'товар'; break;
+        case 'feedbacks': $nomination = 'отзыв'; break;
+        case 'images': $nomination = 'фото'; break;
+        case 'users': $nomination = 'пользователя'; break;
+        default: '';
+    }
+
     foreach($data as $value) {
         $arr1 = [];
         $arr2 = [];
@@ -183,6 +192,18 @@ function gridItems($data, $file) {
             $arr1[] = '{{' . strtoupper($k) . '}}';
             $arr2[] = $v;
         }
+
+        $arr1[] = '{{EDIT}}';
+        $arr1[] = '{{DELETE}}';
+        if(isset($_SESSION['auth']) && isset($_SESSION['role']) && $_SESSION['auth'] == 1 && $_SESSION['role'] == 'administrator') {
+            $arr2[] = '<a id="' . $value['id'] . '" class="edit-links btn btn-info btn-xs" title="Изменить ' . $nomination . '"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>';
+            $arr2[] = '<a href="./index.php?r=' . $unit . '/delete&id=' . $value['id'] . '" class="btn btn-danger btn-xs" title="Удалить ' . $nomination . '" onclick="return confirm(\'Вы уверены?\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
+        } else {
+            $arr2[] = '';
+            $arr2[] = '';
+        }
+
+
         $item .= '<div class="col-sm-4 text-center">';
         $item .= file_get_contents($file);
         $item .= '</div>';
@@ -199,19 +220,37 @@ function gridItems($data, $file) {
     return $result;
 }
 
-function listItems($data, $file) {
+function listItems($data, $file, $unit) {
     $result = '';
-    
+
+    switch($unit) {
+        case 'products': $nomination = 'товар'; break;
+        case 'feedbacks': $nomination = 'отзыв'; break;
+        case 'images': $nomination = 'фото'; break;
+        case 'users': $nomination = 'пользователя'; break;
+        default: '';
+    }
     foreach($data as $value) {
         $arr1 = [];
         $arr2 = [];
         $item = '';
 
         foreach($value as $k => $v) {
-            $arr1[] = '{{' . strtoupper($k) . '}}';
+            $arr1[] = '{{' . strtoupper($k) . '}}';            
             $arr2[] = $v;
         }
-        
+
+        $arr1[] = '{{EDIT}}';
+        $arr1[] = '{{DELETE}}';
+        if(isset($_SESSION['auth']) && isset($_SESSION['role']) && $_SESSION['auth'] == 1 && $_SESSION['role'] == 'administrator') {
+            $arr2[] = '<a id="' . $value['id'] . '" class="edit-links btn btn-info btn-xs" title="Изменить ' . $nomination . '"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>';
+            $arr2[] = '<a href="./index.php?r=' . $unit . '/delete&id=' . $value['id'] . '" class="btn btn-danger btn-xs" title="Удалить ' . $nomination . '" onclick="return confirm(\'Вы уверены?\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
+        } else {
+            $arr2[] = '';
+            $arr2[] = '';
+        }
+
+       
         $item .= file_get_contents($file);
    
         $result .= str_replace($arr1, $arr2, $item);
