@@ -58,14 +58,11 @@ if(isset($_GET['r']) && $_GET['r'] != '') {
     }
 } else {
     /* для остальных случаев формируем переменные для страницы с фото*/
-    $variables['unit'] = 'images';
+    $variables['unit'] = 'products';
     $variables['page'] = 'index';    
-    $variables['title'] = 'Фотогалерея';
+    $variables['title'] = 'Магазин';
     /* задаем параметры сортировки элементов фотогалереи */
-    $variables['sort'] = [
-        'column' => 'img_view_cnt',
-        'direction' => 'DESC'
-    ];
+    $variables['sort'] = NULL;
     /* задаем формат вывода элементов */
     $variables['format'] = 'grid';
 }
