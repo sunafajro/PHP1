@@ -27,9 +27,11 @@ function renderPage($db, $variables) {
     
     /* формируем данные для вывода на страницу и подставляем готовый код в шаблон */
     $params[] = '{{SITE_TITLE}}';
+    $params[] = '{{UNIT}}';
     $params[] = '{{USER_BLOCK}}';
     $params[] = '{{USER_NAME}}';
     $values[] = $variables['title'];
+    $values[] = $variables['unit'];
     $values[] = $user_block;
     $values[] = $username;
     
