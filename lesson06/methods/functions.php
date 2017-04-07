@@ -17,7 +17,11 @@ function renderPage($db, $variables) {
     
     /* формируем данные для вывода на страницу и подставляем готовый код в шаблон */
     $params[] = '{{SITE_TITLE}}';
+    $params[] = '{{UNIT}}';
     $values[] = $variables['title'];
+    $values[] = $variables['unit'];
+
+    /* в зависимости от типа страницы заправиваем из базы один или группу элементов */
     switch($variables['page']) {
         case 'index': $data = getItems($db, $variables['unit'], $variables['sort']); break;
         case 'view': 
@@ -27,12 +31,12 @@ function renderPage($db, $variables) {
             }
             break;
     }
+
     /* формируем данные для вывода на страницу и подставляем готовый код в шаблон */
-    
     $params[] = '{{CONTENT}}';
     $result = '';
     $file = '';
-
+    /* формируем контент страницы с группой элементов */
     if($variables['page'] == 'index') {
         if(!empty($data)) {
             $file = './templates/' . $variables['unit'] . '/_items.php';
@@ -45,7 +49,7 @@ function renderPage($db, $variables) {
             $result .= '<div class="alert alert-warning" role="alert">Нет элементов для отображения!</div>';
         }      
     }
-
+    /* формируем контент страницы с одним элементом */
     if($variables['page'] == 'view') {
         if(!empty($data)) {
             $item = '';
@@ -110,7 +114,9 @@ function createItem($db, $table, $args){
 function updateItem($db, $table, $args){
     $params = [];
     foreach($args as $key => $value) {
-        $params[] = $key . '=:' . $key;
+        if($key != 'id') {
+            $params[] = $key . '=:' . $key;
+        }
     }
     $sql = 'UPDATE ' . $table . ' SET ' . implode(',', $params) . ' WHERE id=:id';
     $query = $db->prepare($sql);

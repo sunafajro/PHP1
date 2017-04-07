@@ -8,16 +8,14 @@
 		    	var id = $(this).attr('id');
 				$.ajax({
 					method: 'POST', 
-					data: 'r=feedbacks/getitem&id=' + id, 
+					data: 'r={{UNIT}}/getitem&id=' + id, 
 					url: './index.php', 
 					success: function(response) {
 						var items = $.parseJSON(response);
-						$('#name').val(items.name);
-						$('#email').val(items.email);
-						$('#title').val(items.title);
-						$('#body').val(items.body);
-						$('#id').val(items.id);
-						$('#r').val('feedbacks/update');
+						$.each(items, function(key, value) {
+						    $('#' + key).val(value);
+						});
+						$('#r').val('{{UNIT}}/update');
 					}
 				});
 			}
