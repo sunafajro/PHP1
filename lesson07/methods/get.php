@@ -52,6 +52,12 @@ if(isset($_GET['r']) && $_GET['r'] != '') {
             /* задаем формат вывода элементов */
             $variables['format'] = 'grid';
             break;
+        case 'users': 
+            $variables['title'] = 'Пользователи';
+            $variables['sort'] = NULL;
+            /* задаем формат вывода элементов */
+            $variables['format'] = 'list';
+            break;
     }
     /* проверяем наличие id в запросе */
     if(isset($_GET['id']) && $_GET['id'] != '') {

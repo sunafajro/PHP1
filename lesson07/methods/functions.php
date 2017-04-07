@@ -26,14 +26,34 @@ function renderPage($db, $variables) {
     $html .= $header;
     
     /* формируем данные для вывода на страницу и подставляем готовый код в шаблон */
+    /* ключи */
     $params[] = '{{SITE_TITLE}}';
     $params[] = '{{UNIT}}';
     $params[] = '{{USER_BLOCK}}';
     $params[] = '{{USER_NAME}}';
+    $params[] = '{{MENU}}';
+    /* значения */
     $values[] = $variables['title'];
     $values[] = $variables['unit'];
     $values[] = $user_block;
     $values[] = $username;
+    
+    $menu_items = getMenuItems($db);
+    
+    if(!empty($menu_items)) {
+        $menu_list = '';
+        foreach($menu_items as $m) {
+            if(isset($_SESSION['role']) && $_SESSION['role'] == 'guest' && $m['folder'] != 'users') {
+                $menu_list .= '<li><a href="./index.php?r=' . $m['folder'] . '/index">' . $m['title'] . '</a></li>';
+            }
+            if(isset($_SESSION['role']) && $_SESSION['role'] == 'administrator') {
+                $menu_list .= '<li><a href="./index.php?r=' . $m['folder'] . '/index">' . $m['title'] . '</a></li>';
+            }
+        }
+        $values[] = $menu_list;
+    } else {
+        $values[] = '';
+    }
     
     switch($variables['page']) {
         case 'index': $data = getItems($db, $variables['unit'], $variables['sort']); break;
@@ -49,20 +69,23 @@ function renderPage($db, $variables) {
     $params[] = '{{CONTENT}}';
     $result = '';
     $file = '';
-
+    /* для странички с несколькими элементами */
     if($variables['page'] == 'index') {
         if(!empty($data)) {
             $file = './templates/' . $variables['unit'] . '/_items.php';
+            /* если надо вывести в виде таблицы */
             if($variables['format'] == 'grid') {
                 $result .= gridItems($data, $file);
-            } else {
+            }
+            /* в противном случае в виде списка */            
+            else {
                 $result .= listItems($data, $file);
             }
         }  else {
             $result .= '<div class="alert alert-warning" role="alert">Нет элементов для отображения!</div>';
         }      
     }
-
+    /* для странички с одним элементом */
     if($variables['page'] == 'view') {
         if(!empty($data)) {
             $item = '';
@@ -217,6 +240,16 @@ function authUser($db, $username, $password) {
     
     return $response;
 }
+
+/* функция аутентификации пользователя */
+function getMenuItems($db) {
+    $result = $db->prepare('SELECT folder, title FROM menu');
+    $result->execute();
+    $response = $result->fetchAll(PDO::FETCH_ASSOC);
+    
+    return $response;
+}
+
 
 /* код для создания уменьшенной копии оригинального изображения 
 *  http://php.net/manual/ru/function.imagecopyresampled.php

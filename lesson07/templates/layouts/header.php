@@ -24,9 +24,7 @@
             <a class="navbar-brand" href="./">Мой сайт</a>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="./index.php?r=products/index">Товары</a></li>                    
-                    <li><a href="./index.php?r=feedbacks/index">Отзывы</a></li>
-                    <li><a href="./index.php?r=images/index">Фото</a></li>
+                    {{MENU}}
                 </ul>
                 {{USER_BLOCK}}                
             </div>
