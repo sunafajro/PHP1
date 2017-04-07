@@ -13,7 +13,19 @@ if(isset($_GET['r']) && $_GET['r'] != '') {
         $variables['page'] = 'index';
     }
 
-    switch($parts[0]) {
+    if($variables['unit'] == 'site' && $variables['page'] == 'index') {
+        $variables['unit'] = 'products';
+    }
+
+    /* удалем сессию и редиректим на главную */
+    if($variables['unit'] == 'site' && $variables['page'] == 'logout') { 
+        session_destroy();
+        /* прерываем скрипт и уходим на главную */
+        header('Location: ./index.php?r=' . $variables['unit'] . '/index');
+    }
+    
+    /* определяем переменные для разных разделов сайта */ 
+    switch($variables['unit']) {
         case 'images': 
             $variables['title'] = 'Фотогалерея';
             /* задаем параметры сортировки элементов фотогалереи */
@@ -49,9 +61,9 @@ if(isset($_GET['r']) && $_GET['r'] != '') {
             $args = [
                 'id' => $variables['id']
             ];
-            deleteItem($db, $parts[0], $args);
+            deleteItem($db, $variables['unit'], $args);
             /* прерываем скрипт и уходим на главную */
-            header('Location: ./index.php?r=' . $parts[0] . '/index');
+            header('Location: ./index.php?r=' . $variables['unit'] . '/index');
         }
     } else {
         $variables['id'] = 0;
