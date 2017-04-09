@@ -53,7 +53,15 @@ if(isset($_GET['r']) && $_GET['r'] != '') {
             $variables['format'] = 'grid';
             break;
         case 'users': 
-            $variables['title'] = 'Пользователи';
+            if($variables['page'] == 'profile') {
+                $variables['page'] = 'view';
+            }
+
+            switch($variables['page']) {
+                case 'index': $variables['title'] = 'Пользователи'; break;
+                case 'view': $variables['title'] = 'Пользователь'; break;
+                case 'basket': $variables['title'] = 'Корзина товаров'; break;
+            }
             $variables['sort'] = NULL;
             /* задаем формат вывода элементов */
             $variables['format'] = 'list';
@@ -72,7 +80,11 @@ if(isset($_GET['r']) && $_GET['r'] != '') {
             header('Location: ./index.php?r=' . $variables['unit'] . '/index');
         }
     } else {
-        $variables['id'] = 0;
+        if(isset($_SESSION['user_id'])) {
+            $variables['id'] = (int)$_SESSION['user_id'];
+        } else {
+            $variables['id'] = 0;
+        }
     }
 } else {
     /* для остальных случаев формируем переменные для страницы с фото*/

@@ -21,6 +21,19 @@ function renderPage($db, $variables) {
         $user_block = file_get_contents('./templates/layouts/login.php');
         $username = '';
     }
+
+    $ids = NULL;
+    $articuls = [];
+    $tmp = [];
+    $i = 0;
+    if(isset($_COOKIE['toBuy']) && !empty($_COOKIE['toBuy'])) {
+        foreach($_COOKIE['toBuy'] as $key => $value) {
+            $tmp[] = ':articul' . $i;
+            $articuls[':articul' . $i] = $key;
+            $i++;
+        }
+        $ids = implode($tmp, ',');
+    }
     
     /* заливаем в переменную заголовочный файл */
     $html .= $header;
@@ -57,6 +70,7 @@ function renderPage($db, $variables) {
     
     switch($variables['page']) {
         case 'index': $data = getItems($db, $variables['unit'], $variables['sort']); break;
+        case 'basket': $data = getItemsByArticul($db, $ids, $articuls); break;
         case 'view': 
             $data = getItem($db, $variables['unit'], $variables['id']); 
             if(!empty($data) && $variables['unit'] == 'images') {
@@ -69,21 +83,26 @@ function renderPage($db, $variables) {
     $result = '';
     $file = '';
     /* для странички с несколькими элементами */
-    if($variables['page'] == 'index') {
+    if($variables['page'] == 'index' || $variables['page'] == 'basket') {
         if(!empty($data)) {
-            $file = './templates/' . $variables['unit'] . '/_items.php';
+            if($variables['page'] == 'index') {
+                $file = './templates/' . $variables['unit'] . '/_items.php';
+            } else {
+                $file = './templates/' . $variables['unit'] . '/_basket_items.php';
+            }
             /* если надо вывести в виде таблицы */
             if($variables['format'] == 'grid') {
                 $result .= gridItems($data, $file, $variables['unit']);
             }
             /* в противном случае в виде списка */            
             else {
-                $result .= listItems($data, $file, $variables['unit']);
+                $result .= listItems($data, $file, $variables['unit'], $variables['page']);
             }
         }  else {
             $result .= '<div class="alert alert-warning" role="alert">Нет элементов для отображения!</div>';
         }      
     }
+
     /* для странички с одним элементом */
     if($variables['page'] == 'view') {
         if(!empty($data)) {
@@ -105,9 +124,9 @@ function renderPage($db, $variables) {
 
     $params[] = '{{CART}}';
     if((int)$_COOKIE['cntItems'] == 0) {
-        $values[] = '<div id="cart-block" class="well hidden">Товаров в корзине: <span id="cart_items_count"></span></div>';
+        $values[] = '<div id="cart-block" class="well hidden">Товаров в корзине: <a id="cart_items_count" href="./index.php?r=users/basket">0</a></div>';
     } else {
-        $values[] = '<div id="cart-block" class="well">Товаров в корзине: <span id="cart_items_count"> ' . (int)$_COOKIE['cntItems'] . '</span></div>';
+        $values[] = '<div id="cart-block" class="well">Товаров в корзине: <a id="cart_items_count" href="./index.php?r=users/basket">' . (int)$_COOKIE['cntItems'] . '</a></div>';
     }
 
     $html .= $content;
@@ -119,12 +138,14 @@ function renderPage($db, $variables) {
     return $html;
 }
 /* функция запроса нескольких элементов из базы */
-function getItems($db, $table, $sort) {
-    $q = 'SELECT * FROM ' . $table;
+function getItems($db, $table, $ids, $sort) {
+    $q = 'SELECT * FROM ' . $table;  
+
     if($sort != NULL && !empty($sort)) {
         $q .= ' ORDER BY ' . $sort['column'] . ' ' . $sort['direction'];
     }
-    $query = $db->query($q);
+    $query = $db->prepare($q);
+    $command = $query->execute();
     $images = $query->fetchAll(PDO::FETCH_ASSOC);
     
     return $images;
@@ -132,9 +153,21 @@ function getItems($db, $table, $sort) {
 
 /* функция запроса одного элемента из базы по id */
 function getItem($db, $table, $id) {
-    $query = $db->query('SELECT * FROM ' . $table . ' WHERE id=' . $id);
+    $query = $db->prepare('SELECT * FROM ' . $table . ' WHERE id=:id');
+    $command = $query->execute([':id'=>$id]);
     $image = $query->fetch(PDO::FETCH_ASSOC);
+
     return $image;
+}
+
+/* функция запроса нескольких товаров из базы по артикулу */
+function getItemsByArticul($db, $ids, $articuls) {
+    $q = 'SELECT * FROM products WHERE articul in (' .$ids . ')';  
+    $query = $db->prepare($q);
+    $command = $query->execute($articuls);
+    $images = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    return $images;
 }
 
 /* функция создания нового элемента в базе */
@@ -226,7 +259,7 @@ function gridItems($data, $file, $unit) {
     return $result;
 }
 
-function listItems($data, $file, $unit) {
+function listItems($data, $file, $unit, $page) {
     $result = '';
 
     switch($unit) {
@@ -251,7 +284,12 @@ function listItems($data, $file, $unit) {
         if(isset($_SESSION['auth']) && isset($_SESSION['role']) && $_SESSION['auth'] == 1 && $_SESSION['role'] == 'administrator') {
             $arr2[] = '<a id="' . $value['id'] . '" class="edit-links btn btn-info btn-xs" title="Изменить ' . $nomination . '"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>';
             $arr2[] = '<a href="./index.php?r=' . $unit . '/delete&id=' . $value['id'] . '" class="btn btn-danger btn-xs" title="Удалить ' . $nomination . '" onclick="return confirm(\'Вы уверены?\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>';
-        } else {
+        }
+        else if($unit == 'users' && $page == 'basket') {
+            $arr2[] = '';
+            $arr2[] = '<button id="prod-' . $value['id'] . '" class="btn btn-danger btn-xs btn-del-buy" title="Удалить" onclick="return confirm(\'Вы уверены?\')"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>';
+        }
+        else {
             $arr2[] = '';
             $arr2[] = '';
         }

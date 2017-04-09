@@ -22,16 +22,35 @@
 			}
 		);
 		/* блок добавления товаров в корзину */
-		$('.btn-buy').click(
+		$('.btn-add-buy').click(
 			function() {
 				var pid = $(this).attr('id').split('-');
 				$.ajax({
 					method: 'POST', 
-					data: 'r={{UNIT}}/addtocart&pid=' + pid[1], 
+					data: 'r={{UNIT}}/addbuy&pid=' + pid[1], 
 					url: './index.php', 
 					success: function(cnt) {
 						$('#cart_items_count').text(cnt);
 						$('#cart-block').removeClass('hidden');
+					}
+				});
+			}
+		);
+		/* блок добавления товаров в корзину */
+		$('.btn-del-buy').click(
+			function() {
+				var pid = $(this).attr('id').split('-');
+				$.ajax({
+					method: 'POST', 
+					data: 'r={{UNIT}}/delbuy&pid=' + pid[1], 
+					url: './index.php', 
+					success: function(cnt) {
+						if(cnt == 0) {
+							$('#cart-block').addClass('hidden');
+						} else {
+							$('#cart_items_count').text(cnt);
+						}
+						$('#product-' + pid[1]).addClass('hidden');
 					}
 				});
 			}

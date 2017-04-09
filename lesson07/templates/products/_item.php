@@ -28,7 +28,7 @@
             </tbody>
         </table>
         <div class="text-center">
-            <button class="btn btn-success btn-lg">Купить!</button>
+            <button id="prod-{{ID}}" class="btn btn-success btn-lg btn-add-buy">Купить!</button>
         </div>
     </div>
 </div>
