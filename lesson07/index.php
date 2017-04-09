@@ -4,10 +4,16 @@
 session_start();
 
 if(!isset($_SESSION['auth'])) {
+	var_dump('!!!!!!!!!!!!!!!!!!!!');
     $_SESSION['auth'] = 0;
     $_SESSION['fullname'] = 'Guest';
     $_SESSION['role'] = 'guest';
 }
+
+if(!isset($_COOKIE['cntItems'])) {
+	setCookie('cntItems', 0);
+}
+
 
 /* подключаем файл для работы с базой*/
 require_once('./db/db.php');

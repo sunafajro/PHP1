@@ -66,7 +66,6 @@ function renderPage($db, $variables) {
     }
     /* формируем данные для вывода на страницу и подставляем готовый код в шаблон */
     
-    $params[] = '{{CONTENT}}';
     $result = '';
     $file = '';
     /* для странички с несколькими элементами */
@@ -101,9 +100,16 @@ function renderPage($db, $variables) {
             $result .= '<div class="alert alert-warning" role="alert">Нет элементов для отображения!</div>';
         } 
     }
-
+    $params[] = '{{CONTENT}}';
     $values[] = $result;
-    
+
+    $params[] = '{{CART}}';
+    if((int)$_COOKIE['cntItems'] == 0) {
+        $values[] = '<div id="cart-block" class="well hidden">Товаров в корзине: <span id="cart_items_count"></span></div>';
+    } else {
+        $values[] = '<div id="cart-block" class="well">Товаров в корзине: <span id="cart_items_count"> ' . (int)$_COOKIE['cntItems'] . '</span></div>';
+    }
+
     $html .= $content;
     $html .= $column;
     $html .= $footer;

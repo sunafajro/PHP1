@@ -1,4 +1,5 @@
 <div class="col-sm-3">
+    {{CART}}
     <h3>Добавить товар:</h3>
     <form action="index.php" method="post" enctype="multipart/form-data">
         <div class="form-group">

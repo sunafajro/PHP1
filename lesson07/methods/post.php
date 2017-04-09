@@ -51,6 +51,16 @@ if(!empty($_POST) && isset($_POST['r']) && $_POST['r'] != '') {
                 exit();
             }
             break;
+        case 'addtocart':
+            if(isset($_POST['pid'])) {
+                $cnt = 0;
+                $cnt = $_COOKIE['cntItems'] + 1;
+                setCookie('cntItems', $cnt);
+                setCookie('toBuy[pid-' . $cnt . ']', (int)$_POST['pid']);
+                echo $cnt;
+                exit();
+            }
+            break;
         case 'login':
             if(isset($_POST['username']) && isset($_POST['password'])) {
                 /* функция аутентификации пользователя */
