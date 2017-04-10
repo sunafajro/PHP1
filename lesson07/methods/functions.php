@@ -138,7 +138,7 @@ function renderPage($db, $variables) {
     return $html;
 }
 /* функция запроса нескольких элементов из базы */
-function getItems($db, $table, $ids, $sort) {
+function getItems($db, $table, $sort) {
     $q = 'SELECT * FROM ' . $table;  
 
     if($sort != NULL && !empty($sort)) {

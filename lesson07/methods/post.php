@@ -60,7 +60,7 @@ if(!empty($_POST) && isset($_POST['r']) && $_POST['r'] != '') {
                 $cnt = $_COOKIE['cntItems'] + 1;
                 setCookie('cntItems', $cnt);
                 $data = getItem($db, 'products', (int)$_POST['pid']);
-                if($_COOKIE['toBuy'] && array_key_exists($data['articul'], $_COOKIE['toBuy'])) {
+                if(isset($_COOKIE['toBuy']) && array_key_exists($data['articul'], $_COOKIE['toBuy'])) {
                     $i = (int)$_COOKIE['toBuy'][$data['articul']] + 1;
                     setCookie('toBuy[' . $data['articul'] . ']', $i);
                 } else {
